@@ -14,8 +14,8 @@ import {
 
 if (!process.env.BOT_TOKEN) throw new Error("Missing BOT_TOKEN");
 
-export const bot = new Bot(process.env.BOT_TOKEN);
-
+export async function handleUpdate(update) {
+	await bot.handleUpdate(update);
 // ── Keyboards ─────────────────────────────────────────────────────────────────
 
 function mainMenuKeyboard() {
