@@ -1,16 +1,8 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/index.mjs",
-      "use": "@vercel/node",
-      "config": { "includeFiles": ["src/**", "data/**"] }
+  "functions": {
+    "api/index.mjs": {
+      "includeFiles": "src/**,data/**"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "api/index.mjs"
-    }
-  ]
+  }
 }
