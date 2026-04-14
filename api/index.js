@@ -7,7 +7,9 @@ export default async function handler(req, res) {
 	}
 
 	try {
-		await handleUpdate(req, res);
+		const update = req.body;
+		await handleUpdate(update);
+		res.status(200).send("ok");
 	} catch (err) {
 		console.error("[webhook error]", err.message);
 		res.status(500).send("error");
