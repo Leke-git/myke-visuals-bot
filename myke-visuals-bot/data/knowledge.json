@@ -1,0 +1,123 @@
+{
+  "studio": {
+    "name": "Myke Visuals",
+    "photographer": "Enekwe Uzoma Michael",
+    "instagram": "@mykevisuals",
+    "studio_ig": "@myke_studios",
+    "phone": "0812 603 8443",
+    "email": "hello@mykevisuals.com",
+    "address": "Evergreen Mall, Durumi, Abuja",
+    "hours": "Monday – Saturday, 9:00 AM – 6:00 PM",
+    "closed": "Sundays (except by special appointment)"
+  },
+  "services": [
+    {
+      "id": "portrait",
+      "name": "Portrait Photography",
+      "description": "Professional portrait sessions for individuals, professionals, creatives, and influencers. Studio and outdoor options available.",
+      "duration": "1–2 hours",
+      "price_from": 45000,
+      "deliverables": "20 edited high-resolution images delivered within 5–7 business days"
+    },
+    {
+      "id": "fashion",
+      "name": "Fashion & Lifestyle",
+      "description": "Editorial fashion shoots, lookbooks, and lifestyle content for brands and influencers.",
+      "duration": "2–4 hours",
+      "price_from": 80000,
+      "deliverables": "30–50 edited images, delivered within 7 business days"
+    },
+    {
+      "id": "product",
+      "name": "Product & Brand Photography",
+      "description": "High-quality product photography for e-commerce, social media, and marketing campaigns.",
+      "duration": "2–3 hours",
+      "price_from": 60000,
+      "deliverables": "25–40 edited images delivered within 5 business days"
+    },
+    {
+      "id": "event",
+      "name": "Event Photography",
+      "description": "Corporate events, private parties, brand activations, conferences, and social gatherings.",
+      "duration": "Full event coverage",
+      "price_from": 120000,
+      "deliverables": "100+ edited images delivered within 7–10 business days"
+    },
+    {
+      "id": "podcast",
+      "name": "Podcast Recording",
+      "description": "Full podcast recording sessions with professional audio gear, lighting, and set design at Myke Studio.",
+      "duration": "Per session",
+      "price_from": 35000,
+      "deliverables": "Recorded audio files + behind-the-scenes photos"
+    },
+    {
+      "id": "content",
+      "name": "Content Creation",
+      "description": "Reels, YouTube content, brand videos, and social media visual campaigns.",
+      "duration": "2–4 hours",
+      "price_from": 75000,
+      "deliverables": "Edited video content + still images, delivered within 7 business days"
+    },
+    {
+      "id": "studio_rental",
+      "name": "Studio Rental",
+      "description": "Rent Myke Studio for your own shoot. Access to all lighting equipment, props, and sets.",
+      "duration": "Per hour",
+      "price_from": 25000,
+      "deliverables": "Full studio access — bring your own photographer or team"
+    }
+  ],
+  "faqs": [
+    {
+      "id": "deposit",
+      "patterns": ["deposit", "booking fee", "how to book", "reserve", "secure"],
+      "answer": "📋 *Booking & Deposit*\n\nA 50% deposit is required to secure your session date. The balance is due on the day of the shoot.\n\nDeposits are non-refundable but can be transferred to a rescheduled date with at least 48 hours notice."
+    },
+    {
+      "id": "turnaround",
+      "patterns": ["how long", "when will i get", "delivery", "turnaround", "days"],
+      "answer": "⏱️ *Turnaround Time*\n\nPortraits & Product: 5–7 business days\nFashion & Lifestyle: 7 business days\nEvents: 7–10 business days\nContent/Video: 7 business days\n\nRush delivery (within 48–72 hours) is available for an additional fee."
+    },
+    {
+      "id": "location",
+      "patterns": ["location", "address", "where", "find you", "directions", "durumi"],
+      "answer": "📍 *Myke Studio Location*\n\nEvergreen Mall, Durumi, Abuja\n\n📞 0812 603 8443\n📸 @myke_studios on Instagram\n\nSessions are by appointment. Walk-ins are subject to availability."
+    },
+    {
+      "id": "hours",
+      "patterns": ["hours", "open", "when", "available", "time"],
+      "answer": "🕐 *Studio Hours*\n\nMonday – Saturday: 9:00 AM – 6:00 PM\nSunday: Closed (special appointments only)\n\nTo book a session outside regular hours, contact us directly."
+    },
+    {
+      "id": "outdoor",
+      "patterns": ["outdoor", "outside", "location shoot", "on location"],
+      "answer": "🌳 *Outdoor / On-Location Shoots*\n\nYes! We do outdoor and on-location shoots across Abuja.\n\nOutdoor sessions are available for portrait, fashion, lifestyle, and event photography. Location fees may apply depending on distance.\n\nTap *Book a Session* to get started!"
+    },
+    {
+      "id": "own_photographer",
+      "patterns": ["own photographer", "bring photographer", "my photographer", "external"],
+      "answer": "✅ *Bringing Your Own Photographer*\n\nAbsolutely — you can bring your own photographer or creative team for studio rentals.\n\nStudio rental starts from ₦25,000/hour and includes full access to our lighting rigs, props, and sets."
+    },
+    {
+      "id": "portfolio",
+      "patterns": ["portfolio", "work", "samples", "previous", "see your work", "instagram"],
+      "answer": "📸 *View Myke's Portfolio*\n\nCheck out our work on Instagram:\n👉 @mykevisuals — https://instagram.com/mykevisuals\n👉 @myke_studios — https://instagram.com/myke_studios\n\nWith 70K+ followers and 500+ posts, there's plenty to explore! 🎨"
+    },
+    {
+      "id": "outfits",
+      "patterns": ["outfit", "wear", "what to wear", "clothing", "dress"],
+      "answer": "👗 *What to Wear*\n\nWe recommend:\n• 2–3 outfit changes for variety\n• Solid colours or minimal patterns work best on camera\n• Avoid logos unless it's a brand shoot\n• Bring accessories to switch up your look\n\nNot sure? Our team can advise you before your session!"
+    },
+    {
+      "id": "editing",
+      "patterns": ["edit", "retouch", "colour", "color grade", "raw"],
+      "answer": "🎨 *Editing & Retouching*\n\nAll delivered images are professionally colour-graded and retouched.\n\nWe don't deliver raw/unedited files. Additional retouching beyond standard is available on request at an extra cost.\n\nWant a specific editing style? Share a reference and we'll match it."
+    },
+    {
+      "id": "payment",
+      "patterns": ["payment", "pay", "transfer", "bank", "how to pay"],
+      "answer": "💳 *Payment*\n\nWe accept:\n• Bank transfer\n• Opay / Palmpay\n• Cash (in studio)\n\nPayment details will be shared after your booking is confirmed. A 50% deposit secures your date."
+    }
+  ]
+}
