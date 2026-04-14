@@ -31,6 +31,21 @@ create table if not exists analytics (
   created_at timestamptz not null default now()
 );
 
+-- Masterclass Registrations
+create table if not exists masterclass_registrations (
+  id uuid primary key default gen_random_uuid(),
+  reg_id text unique not null,
+  user_id text not null,
+  username text,
+  full_name text not null,
+  email text not null,
+  phone text not null,
+  experience text,
+  goals text,
+  status text default 'REGISTERED',
+  created_at timestamptz not null default now()
+);
+
 -- Indexes
 create index if not exists bookings_user_idx on bookings(user_id);
 create index if not exists bookings_status_idx on bookings(status);

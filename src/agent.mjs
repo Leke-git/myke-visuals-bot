@@ -24,7 +24,7 @@ Phone: ${studio.phone}
 
 Classify the user message into one intent. Return JSON only — no preamble, no markdown:
 {
-  "intent": "BOOK" | "SERVICES" | "PORTFOLIO" | "FAQ" | "PRICING" | "HANDOFF" | "GREETING" | "GENERAL",
+  "intent": "BOOK" | "SERVICES" | "PORTFOLIO" | "FAQ" | "PRICING" | "HANDOFF" | "GREETING" | "MASTERCLASS" | "GENERAL",
   "faqQuery": string | null,
   "reply": string | null
 }
@@ -37,6 +37,7 @@ Intent rules:
 - PRICING: asks about cost/price/how much without a specific service in mind
 - HANDOFF: wants to speak to a human, has a complaint, urgent request
 - GREETING: hello, hi, hey, start
+- MASTERCLASS: asks about the masterclass, unleash your creativity, photography course, workshop, training
 - GENERAL: anything else — write a warm helpful reply in the "reply" field
 
 For GENERAL and GREETING, always write a friendly reply in the "reply" field.

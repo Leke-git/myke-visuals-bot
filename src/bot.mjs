@@ -11,6 +11,15 @@ import {
 	saveBooking,
 	formatConfirmation
 } from "./booking.mjs";
+import {
+	missingMasterclassFields,
+	nextMasterclassQuestion,
+	parseExperienceLevel,
+	mergeMasterclassDraft,
+	saveMasterclassRegistration,
+	formatMasterclassConfirmation,
+	masterclassInfo
+} from "./masterclass.mjs";
 
 if (!process.env.BOT_TOKEN) throw new Error("Missing BOT_TOKEN");
 
@@ -21,6 +30,8 @@ await bot.init();
 
 function mainMenuKeyboard() {
 	return new InlineKeyboard()
+		.text("🎓 Unleash Your Creativity", "masterclass")
+		.row()
 		.text("📷 Book a Session", "book")
 		.text("🎨 Our Services", "services")
 		.row()
@@ -29,6 +40,13 @@ function mainMenuKeyboard() {
 		.row()
 		.text("💰 Pricing", "pricing")
 		.text("📞 Contact Us", "contact");
+}
+
+function masterclassKeyboard() {
+	return new InlineKeyboard()
+		.text("✍️ Sign Me Up!", "masterclass_signup")
+		.row()
+		.text("⬅️ Back to Menu", "menu");
 }
 
 function servicesKeyboard() {
@@ -182,6 +200,42 @@ bot.callbackQuery("contact", async (ctx) => {
 	);
 });
 
+// ── Masterclass callbacks ─────────────────────────────────────────────────────
+
+bot.callbackQuery("masterclass", async (ctx) => {
+	await ctx.answerCallbackQuery();
+	await logEvent({ userId: ctx.from.id, event: "VIEW_MASTERCLASS" });
+	await ctx.editMessageText(masterclassInfo(), {
+		parse_mode: "Markdown",
+		reply_markup: masterclassKeyboard()
+	});
+});
+
+bot.callbackQuery("masterclass_signup", async (ctx) => {
+	await ctx.answerCallbackQuery();
+	const session = await getSession(ctx.from.id);
+	session.step = "MASTERCLASS";
+	session.masterclass = {};
+	await setSession(ctx.from.id, session);
+	await logEvent({ userId: ctx.from.id, event: "MASTERCLASS_START" });
+	await ctx.editMessageText(
+		nextMasterclassQuestion(["full_name"], {}),
+		{
+			parse_mode: "Markdown",
+			reply_markup: new InlineKeyboard().text("❌ Cancel", "masterclass_cancel")
+		}
+	);
+});
+
+bot.callbackQuery("masterclass_cancel", async (ctx) => {
+	await ctx.answerCallbackQuery();
+	await clearSession(ctx.from.id);
+	await ctx.editMessageText(
+		"No worries! You can sign up anytime 😊",
+		{ reply_markup: mainMenuKeyboard() }
+	);
+});
+
 // Service detail
 bot.callbackQuery(/^service_(.+)$/, async (ctx) => {
 	await ctx.answerCallbackQuery();
@@ -298,6 +352,72 @@ bot.on("message:text", async (ctx) => {
 		return;
 	}
 
+	// Active masterclass signup flow
+	if (session.step === "MASTERCLASS") {
+		const reg = session.masterclass ?? {};
+		const missing = ["full_name", "email", "phone", "experience", "goals"].filter((f) => !reg[f]);
+
+		if (missing.length === 0) {
+			// Shouldn't happen, but safety net
+			await clearSession(userId);
+			await ctx.reply("It looks like you're already registered! Type /start to go back to the menu.");
+			return;
+		}
+
+		const field = missing[0];
+		let value = text.trim();
+
+		// Validate experience field
+		if (field === "experience") {
+			const parsed = parseExperienceLevel(value);
+			if (!parsed) {
+				await ctx.reply(
+					"Please reply with *1*, *2*, *3*, or *4* to indicate your experience level 🎨",
+					{ parse_mode: "Markdown", reply_markup: new InlineKeyboard().text("❌ Cancel", "masterclass_cancel") }
+				);
+				return;
+			}
+			value = parsed;
+		}
+
+		// Basic email validation
+		if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+			await ctx.reply(
+				"That doesn't look like a valid email address. Please try again 📧",
+				{ parse_mode: "Markdown", reply_markup: new InlineKeyboard().text("❌ Cancel", "masterclass_cancel") }
+			);
+			return;
+		}
+
+		session.masterclass = mergeMasterclassDraft(reg, field, value);
+		const stillMissing = ["full_name", "email", "phone", "experience", "goals"].filter((f) => !session.masterclass[f]);
+
+		if (stillMissing.length > 0) {
+			await setSession(userId, session);
+			await ctx.reply(nextMasterclassQuestion(stillMissing, session.masterclass), {
+				parse_mode: "Markdown",
+				reply_markup: new InlineKeyboard().text("❌ Cancel", "masterclass_cancel")
+			});
+			return;
+		}
+
+		// All fields collected — save
+		const result = await saveMasterclassRegistration({
+			userId,
+			username: ctx.from.username,
+			reg: session.masterclass
+		});
+
+		await logEvent({ userId, event: "MASTERCLASS_REGISTERED", data: result.regId });
+		await clearSession(userId);
+
+		await ctx.reply(formatMasterclassConfirmation(result), {
+			parse_mode: "Markdown",
+			reply_markup: mainMenuKeyboard()
+		});
+		return;
+	}
+
 	// Classify intent
 	const plan = await classifyIntent({ text, history: session.history });
 	await logEvent({ userId, event: "INTENT", data: plan.intent });
@@ -361,6 +481,13 @@ bot.on("message:text", async (ctx) => {
 			);
 			break;
 		}
+
+		case "MASTERCLASS":
+			await ctx.reply(masterclassInfo(), {
+				parse_mode: "Markdown",
+				reply_markup: masterclassKeyboard()
+			});
+			break;
 
 		case "HANDOFF": {
 			const studio = getStudio();
