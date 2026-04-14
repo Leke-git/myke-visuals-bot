@@ -394,6 +394,8 @@ bot.on("message:text", async (ctx) => {
 // ── Error handler ─────────────────────────────────────────────────────────────
 
 bot.catch((err) => {
+	if (err.message?.includes("query is too old")) return;
+	if (err.message?.includes("query ID is invalid")) return;
 	console.error("[bot error]", err.message);
 });
 
