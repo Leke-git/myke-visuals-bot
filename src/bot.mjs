@@ -26,6 +26,16 @@ if (!process.env.BOT_TOKEN) throw new Error("Missing BOT_TOKEN");
 export const bot = new Bot(process.env.BOT_TOKEN);
 await bot.init();
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+async function safeAnswer(ctx) {
+	try {
+		await ctx.answerCallbackQuery();
+	} catch {
+		// Query expired or invalid — safe to ignore
+	}
+}
+
 // ── Keyboards ─────────────────────────────────────────────────────────────────
 
 function mainMenuKeyboard() {
@@ -127,14 +137,14 @@ bot.command("restart", async (ctx) => {
 // ── Callback queries ──────────────────────────────────────────────────────────
 
 bot.callbackQuery("menu", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	await ctx.editMessageText("Here's the main menu 👇", {
 		reply_markup: mainMenuKeyboard()
 	});
 });
 
 bot.callbackQuery("services", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	await logEvent({ userId: ctx.from.id, event: "VIEW_SERVICES" });
 	await ctx.editMessageText(
 		`🎨 *Myke Visuals Services*\n\nTap a service to learn more:`,
@@ -143,7 +153,7 @@ bot.callbackQuery("services", async (ctx) => {
 });
 
 bot.callbackQuery("portfolio", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	await logEvent({ userId: ctx.from.id, event: "VIEW_PORTFOLIO" });
 	await ctx.editMessageText(
 		`📸 *Myke Visuals Portfolio*\n\n` +
@@ -161,7 +171,7 @@ bot.callbackQuery("portfolio", async (ctx) => {
 });
 
 bot.callbackQuery("pricing", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	await logEvent({ userId: ctx.from.id, event: "VIEW_PRICING" });
 	const services = getServices();
 	const list = services
@@ -174,7 +184,7 @@ bot.callbackQuery("pricing", async (ctx) => {
 });
 
 bot.callbackQuery("faqs", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	await ctx.editMessageText(
 		`❓ *Frequently Asked Questions*\n\nTap a topic below:`,
 		{ parse_mode: "Markdown", reply_markup: faqKeyboard() }
@@ -182,7 +192,7 @@ bot.callbackQuery("faqs", async (ctx) => {
 });
 
 bot.callbackQuery("contact", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	const studio = getStudio();
 	await ctx.editMessageText(
 		`📞 *Contact Myke Visuals*\n\n` +
@@ -203,7 +213,7 @@ bot.callbackQuery("contact", async (ctx) => {
 // ── Masterclass callbacks ─────────────────────────────────────────────────────
 
 bot.callbackQuery("masterclass", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	await logEvent({ userId: ctx.from.id, event: "VIEW_MASTERCLASS" });
 	await ctx.editMessageText(masterclassInfo(), {
 		parse_mode: "Markdown",
@@ -212,7 +222,7 @@ bot.callbackQuery("masterclass", async (ctx) => {
 });
 
 bot.callbackQuery("masterclass_signup", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	const session = await getSession(ctx.from.id);
 	session.step = "MASTERCLASS";
 	session.masterclass = {};
@@ -228,7 +238,7 @@ bot.callbackQuery("masterclass_signup", async (ctx) => {
 });
 
 bot.callbackQuery("masterclass_cancel", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	await clearSession(ctx.from.id);
 	await ctx.editMessageText(
 		"No worries! You can sign up anytime 😊",
@@ -238,7 +248,7 @@ bot.callbackQuery("masterclass_cancel", async (ctx) => {
 
 // Service detail
 bot.callbackQuery(/^service_(.+)$/, async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	const serviceId = ctx.match[1];
 	const service = getServiceById(serviceId);
 	if (!service) return;
@@ -255,7 +265,7 @@ bot.callbackQuery(/^service_(.+)$/, async (ctx) => {
 
 // FAQ topics
 bot.callbackQuery(/^faq_(.+)$/, async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	const topic = ctx.match[1];
 	const answer = lookupFaq(topic);
 
@@ -270,7 +280,7 @@ bot.callbackQuery(/^faq_(.+)$/, async (ctx) => {
 
 // Booking start
 bot.callbackQuery(/^book(_(.+))?$/, async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	const serviceId = ctx.match[2] ?? null;
 	const session = await getSession(ctx.from.id);
 
@@ -297,7 +307,7 @@ bot.callbackQuery(/^book(_(.+))?$/, async (ctx) => {
 });
 
 bot.callbackQuery("cancel", async (ctx) => {
-	await ctx.answerCallbackQuery();
+	await safeAnswer(ctx);
 	await clearSession(ctx.from.id);
 	await ctx.editMessageText(
 		"No problem — booking cancelled. Anything else I can help with?",

@@ -6,12 +6,15 @@ export default async function handler(req, res) {
 		return;
 	}
 
+	const update = req.body;
+
+	// Acknowledge Telegram immediately — must respond within 10s or callback queries expire
+	res.status(200).send("ok");
+
+	// Process update after response is sent; Vercel keeps function alive until this resolves
 	try {
-		const update = req.body;
 		await handleUpdate(update);
-		res.status(200).send("ok");
 	} catch (err) {
 		console.error("[webhook error]", err.message);
-		res.status(500).send("error");
 	}
 }
