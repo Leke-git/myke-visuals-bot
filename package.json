@@ -1,11 +1,10 @@
 {
   "name": "myke-visuals-bot",
   "version": "1.0.0",
-  "type": "module",
-  "main": "src/bot.js",
+  "main": "src/bot.mjs",
   "scripts": {
-    "dev": "node --watch src/bot.js",
-    "start": "node src/bot.js"
+    "dev": "node --watch src/bot.mjs",
+    "start": "node src/bot.mjs"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
