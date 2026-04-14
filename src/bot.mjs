@@ -82,7 +82,6 @@ async function sendWelcome(ctx) {
 	await ctx.reply(
 		`👋 Hey ${name}! Welcome to *${studio.name}* 📸\n\n` +
 		`I'm your booking assistant for Abuja's creative photography studio.\n\n` +
-		`Run by *${studio.photographer}* (@${studio.instagram}) — 70K+ followers and counting.\n\n` +
 		`What would you like to do today?`,
 		{ parse_mode: "Markdown", reply_markup: mainMenuKeyboard() }
 	);
