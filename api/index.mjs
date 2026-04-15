@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 		return;
 	}
 
-	// Init bot once per cold start (avoids top-level await blocking module load)
+	// Init bot once per cold start
 	if (!botReady) {
 		try {
 			await bot.init();
@@ -24,13 +24,13 @@ export default async function handler(req, res) {
 	const update = req.body;
 	console.log("[webhook] received update:", JSON.stringify(update).slice(0, 200));
 
-	// Acknowledge Telegram immediately — must respond within 10s or callback queries expire
-	res.status(200).send("ok");
-
-	// Process update after response is sent; Vercel keeps function alive until this resolves
+	// Process fully first, THEN respond — Vercel terminates function on res.send()
 	try {
 		await handleUpdate(update);
+		console.log("[webhook] update handled ok");
 	} catch (err) {
 		console.error("[webhook error]", err.message, err.stack);
 	}
+
+	res.status(200).send("ok");
 }
