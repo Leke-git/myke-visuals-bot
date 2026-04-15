@@ -1,4 +1,6 @@
-import { handleUpdate } from "../src/bot.mjs";
+import { handleUpdate, bot } from "../src/bot.mjs";
+
+let botReady = false;
 
 export default async function handler(req, res) {
 	if (req.method !== "POST") {
@@ -6,7 +8,21 @@ export default async function handler(req, res) {
 		return;
 	}
 
+	// Init bot once per cold start (avoids top-level await blocking module load)
+	if (!botReady) {
+		try {
+			await bot.init();
+			botReady = true;
+			console.log("[bot] initialized ok");
+		} catch (err) {
+			console.error("[bot] init failed:", err.message);
+			res.status(500).send("bot init failed");
+			return;
+		}
+	}
+
 	const update = req.body;
+	console.log("[webhook] received update:", JSON.stringify(update).slice(0, 200));
 
 	// Acknowledge Telegram immediately — must respond within 10s or callback queries expire
 	res.status(200).send("ok");
@@ -15,6 +31,6 @@ export default async function handler(req, res) {
 	try {
 		await handleUpdate(update);
 	} catch (err) {
-		console.error("[webhook error]", err.message);
+		console.error("[webhook error]", err.message, err.stack);
 	}
 }

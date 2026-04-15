@@ -24,7 +24,6 @@ import {
 if (!process.env.BOT_TOKEN) throw new Error("Missing BOT_TOKEN");
 
 export const bot = new Bot(process.env.BOT_TOKEN);
-await bot.init();
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
